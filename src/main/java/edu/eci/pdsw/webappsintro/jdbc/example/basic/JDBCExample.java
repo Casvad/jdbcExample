@@ -61,7 +61,7 @@ public class JDBCExample {
             registrarNuevoProducto(con, suCodigoECI, "SU NOMBRE", 99999999);            
             con.commit();
             
-            
+            cambiarNombreProducto(con, suCodigoECI, "EL NUEVO NOMBRE");
             
             con.close();
                                    
@@ -72,6 +72,14 @@ public class JDBCExample {
         
     }
     
+    /**
+     * Agregar un nuevo producto con los parámetros dados
+     * @param con la conexión JDBC
+     * @param codigo
+     * @param nombre
+     * @param precio
+     * @throws SQLException 
+     */
     public static void registrarNuevoProducto(Connection con, int codigo, String nombre,int precio) throws SQLException{
         //Crear preparedStatement
         //Asignar parámetros
@@ -82,7 +90,12 @@ public class JDBCExample {
         
     }
     
-
+    /**
+     * Consultar los nombres de los productos asociados a un pedido
+     * @param con la conexión JDBC
+     * @param codigoPedido el código del pedido
+     * @return 
+     */
     public static List<String> nombresProductosPedido(Connection con, int codigoPedido){
         List<String> np=new LinkedList<>();
         
@@ -96,7 +109,12 @@ public class JDBCExample {
     }
 
     
-    
+    /**
+     * Calcular el costo total de un pedido
+     * @param con
+     * @param codigoPedido código del pedido cuyo total se calculará
+     * @return el costo total del pedido (suma de: cantidades*precios)
+     */
     public static int valorTotalPedido(Connection con, int codigoPedido){
         
         //Crear prepared statement
@@ -108,6 +126,12 @@ public class JDBCExample {
     }
     
 
+    /**
+     * Cambiar el nombre de un producto
+     * @param con
+     * @param codigoProducto codigo del producto cuyo nombre se cambiará
+     * @param nuevoNombre el nuevo nombre a ser asignado
+     */
     public static void cambiarNombreProducto(Connection con, int codigoProducto, 
             String nuevoNombre){
         
