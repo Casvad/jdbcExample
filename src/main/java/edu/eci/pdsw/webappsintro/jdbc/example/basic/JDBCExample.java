@@ -21,6 +21,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,31 +42,79 @@ public class JDBCExample {
             Class.forName(driver);
             Connection con=DriverManager.getConnection(url,user,pwd);
             con.setAutoCommit(false);
-                        
+                 
             
-            PreparedStatement ps=con.prepareStatement("SELECT ped.codigo,ped.fecha_radicacion,dp.cantidad,prod.nombre,prod.precio FROM\n" +
-"	ORD_PEDIDOS as ped\n" +
-"	INNER JOIN ORD_DETALLES_PEDIDO AS dp\n" +
-"	ON dp.pedido_fk=ped.codigo\n" +
-"	INNER JOIN ORD_PRODUCTOS as prod\n" +
-"	ON dp.producto_fk=prod.codigo	\n" +
-"	WHERE ped.codigo=?");
-            ps.setInt(1, 1);
-            ResultSet rs=ps.executeQuery();
+            System.out.println("Valor total pedido 1:"+valorTotalPedido(con, 1));
             
-            while(rs.next()){
-                System.out.println(rs.getString(1));
-                System.out.println(rs.getString(2));
-                System.out.println(rs.getString(3));
+            List<String> prodsPedido=nombresProductosPedido(con, 1);
+            
+            
+            System.out.println("Productos del pedido 1:");
+            System.out.println("-----------------------");
+            for (String nomprod:prodsPedido){
+                System.out.println(nomprod);
             }
+            System.out.println("-----------------------");
+            
+            
+            int suCodigoECI=20134423;
+            registrarNuevoProducto(con, suCodigoECI, "SU NOMBRE", 99999999);            
+            con.commit();
+            
             
             
             con.close();
-            
-            
+                                   
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(JDBCExample.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+    }
+    
+    public static void registrarNuevoProducto(Connection con, int codigo, String nombre,int precio) throws SQLException{
+        //Crear preparedStatement
+        //Asignar parámetros
+        //usar 'execute'
+
+        
+        con.commit();
+        
+    }
+    
+
+    public static List<String> nombresProductosPedido(Connection con, int codigoPedido){
+        List<String> np=new LinkedList<>();
+        
+        //Crear prepared statement
+        //asignar parámetros
+        //usar executeQuery
+        //Sacar resultados del ResultSet
+        //Llenar la lista y retornarla
+        
+        return np;
+    }
+
+    
+    
+    public static int valorTotalPedido(Connection con, int codigoPedido){
+        
+        //Crear prepared statement
+        //asignar parámetros
+        //usar executeQuery
+        //Sacar resultado del ResultSet
+        
+        return 0;
+    }
+    
+
+    public static void cambiarNombreProducto(Connection con, int codigoProducto, 
+            String nuevoNombre){
+        
+        //Crear prepared statement
+        //asignar parámetros
+        //usar executeUpdate
+        //verificar que se haya actualizado exactamente un registro
         
         
     }
