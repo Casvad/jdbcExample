@@ -34,10 +34,10 @@ public class JDBCExample {
     
     public static void main(String args[]){
         try {
-            String url="jdbc:mysql://desarrollo.is.escuelaing.edu.co:3306/bdprueba";
+            String url="jdbc:mysql://HOST:3306/BD";
             String driver="com.mysql.jdbc.Driver";
-            String user="bdprueba";
-            String pwd="bdprueba";
+            String user="USER";
+            String pwd="PWD";
                         
             Class.forName(driver);
             Connection con=DriverManager.getConnection(url,user,pwd);
@@ -62,6 +62,8 @@ public class JDBCExample {
             con.commit();
             
             cambiarNombreProducto(con, suCodigoECI, "EL NUEVO NOMBRE");
+            con.commit();
+            
             
             con.close();
                                    
