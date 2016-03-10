@@ -34,10 +34,10 @@ public class JDBCExample {
     
     public static void main(String args[]){
         try {
-            String url="jdbc:mysql://HOST:3306/BD";
+            String url="jdbc:mysql://desarrollo.is.escuelaing.edu.co:3306/bdprueba";
             String driver="com.mysql.jdbc.Driver";
-            String user="USER";
-            String pwd="PWD";
+            String user="bdprueba";
+            String pwd="bdprueba";
                         
             Class.forName(driver);
             Connection con=DriverManager.getConnection(url,user,pwd);
@@ -57,8 +57,8 @@ public class JDBCExample {
             System.out.println("-----------------------");
             
             
-            int suCodigoECI=20134423;
-            registrarNuevoProducto(con, suCodigoECI, "SU NOMBRE", 99999999);            
+            int suCodigoECI=2105534;
+            registrarNuevoProducto(con, suCodigoECI, "Carlos Sanchez", 99999999);            
             con.commit();
             
             cambiarNombreProducto(con, suCodigoECI, "EL NUEVO NOMBRE");
@@ -84,12 +84,15 @@ public class JDBCExample {
      */
     public static void registrarNuevoProducto(Connection con, int codigo, String nombre,int precio) throws SQLException{
         //Crear preparedStatement
+        PreparedStatement statement;
+        String consulta="INSERT INTO ORD_PRODUCTOS (codigo,nombre,precio) values (?,?,?)" ;
+        statement=con.prepareStatement(consulta);
         //Asignar parámetros
+        statement.setInt(0,codigo);
+        statement.setString(1, nombre);
+        statement.setInt(2,precio);
         //usar 'execute'
-
-        
-        con.commit();
-        
+        statement.execute();
     }
     
     /**
@@ -98,15 +101,22 @@ public class JDBCExample {
      * @param codigoPedido el código del pedido
      * @return 
      */
-    public static List<String> nombresProductosPedido(Connection con, int codigoPedido){
+    public static List<String> nombresProductosPedido(Connection con, int codigoPedido) throws SQLException{
         List<String> np=new LinkedList<>();
         
         //Crear prepared statement
+        PreparedStatement statement;
+        String consulta="SELECT nombre FROM ORD_PRODUCTOS,ORD_PEDIDOS,ORD_DETALLES_PEDIDO WHERE ORD_PEDIDOS.codigo=? and ORD_PEDIDOS.codigo=ORD_DETALLES_PEDIDO.pedido_fk and ORD_DETALLES_PEDIDO.producto_fk=ORD_PRODUCTOS.codigo";
+        statement=con.prepareStatement(consulta);
         //asignar parámetros
+        statement.setInt(0,codigoPedido);
         //usar executeQuery
+        ResultSet rs=statement.executeQuery();
         //Sacar resultados del ResultSet
         //Llenar la lista y retornarla
-        
+        while(rs.next()){
+            np.add(rs.getString(0));
+        }
         return np;
     }
 
