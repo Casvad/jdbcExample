@@ -121,40 +121,46 @@ public class JDBCExample {
     }
 
     
-    /**
+     /**
      * Calcular el costo total de un pedido
      * @param con
      * @param codigoPedido código del pedido cuyo total se calculará
      * @return el costo total del pedido (suma de: cantidades*precios)
      */
-    public static int valorTotalPedido(Connection con, int codigoPedido){
-        
+    public static int valorTotalPedido(Connection con, int codigoPedido) throws SQLException{
+        int ans = 0;
         //Crear prepared statement
+        PreparedStatement statement;
+        String consulta="SELECT SUM(precio) FROM ORD_PRODUCTOS,ORD_PEDIDOS,ORD_DETALLES_PEDIDO WHERE ORD_PEDIDOS.codigo=? and ORD_PEDIDOS.codigo=ORD_DETALLES_PEDIDO.pedido_fk and ORD_DETALLES_PEDIDO.producto_fk=ORD_PRODUCTOS.codigo";
+        statement=con.prepareStatement(consulta);
         //asignar parámetros
+        statement.setInt(0,codigoPedido);
         //usar executeQuery
+        ResultSet rs=statement.executeQuery();
         //Sacar resultado del ResultSet
-        
-        return 0;
+        ans=rs.getInt(0);
+        return ans;
     }
     
-
+    
     /**
      * Cambiar el nombre de un producto
      * @param con
      * @param codigoProducto codigo del producto cuyo nombre se cambiará
      * @param nuevoNombre el nuevo nombre a ser asignado
      */
-    public static void cambiarNombreProducto(Connection con, int codigoProducto, 
-            String nuevoNombre){
-        
+    public static void cambiarNombreProducto(Connection con, int codigoProducto, String nuevoNombre) throws SQLException{
         //Crear prepared statement
+        PreparedStatement statement;
+        String consulta="UPDATE ORD_PRODUCTOS SET nombre=? WHERE codigo=?";
+        statement=con.prepareStatement(consulta);
         //asignar parámetros
+        statement.setInt(0,codigoProducto);        
+        statement.setString(1,nuevoNombre);        
         //usar executeUpdate
+        int rs=statement.executeUpdate();
         //verificar que se haya actualizado exactamente un registro
-        
-        
+        System.out.print("Verificando: ");
+        System.out.println(rs==1);
     }
-    
-    
-    
 }
